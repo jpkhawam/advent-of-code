@@ -8,14 +8,14 @@
 */
 
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::Read;
 
 fn main() {
-    let input_file = File::open("./input.txt").expect("Cannot open input file.");
-    let file_reader = BufReader::new(&input_file);
-
+    let mut input_file = File::open("./input.txt").expect("Cannot open input file.");
     let mut line = String::new();
-    file_reader.lines().for_each(|f| line.push_str(&f.unwrap()));
+    input_file
+        .read_to_string(&mut line)
+        .expect("Error reading file content");
 
     let mut vec = vec![
         line.chars().nth(0).unwrap(),
@@ -42,11 +42,9 @@ fn main() {
     for i in 0..unique_amount {
         vec.push(line.chars().nth(i).unwrap());
     }
-
     while contains_duplicate(&vec) {
         move_right(&mut vec, &mut starting_index, &line);
     }
-
     println!(
         "A2 // {} characters need to be processed before the first start-of-message \
         marker is detected",
@@ -63,7 +61,7 @@ fn contains_duplicate(vec: &Vec<char>) -> bool {
     false
 }
 
-fn move_right(vec: &mut Vec<char>, index: &mut usize, line: &String) {
+fn move_right(vec: &mut Vec<char>, index: &mut usize, line: &String) -> () {
     let len = vec.len() - 1;
     for i in 0..len {
         vec[i] = vec[i + 1];
@@ -71,3 +69,4 @@ fn move_right(vec: &mut Vec<char>, index: &mut usize, line: &String) {
     *index += 1;
     vec[len] = line.chars().nth(*index + len).unwrap();
 }
+
