@@ -69,7 +69,10 @@ fn main() {
 
             let string_value = format!(
                 "{}{}",
-                first_digit.ok_or(0).expect("First digit was None").to_string(),
+                first_digit
+                    .ok_or(0)
+                    .expect("First digit was None")
+                    .to_string(),
                 second_digit.to_string()
             );
             actual_total += string_value.parse::<i32>().unwrap();
